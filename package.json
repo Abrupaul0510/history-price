@@ -1,0 +1,25 @@
+{
+  "name": "history-price",
+  "version": "1.0.0",
+  "description": "dfpricehistory",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Abrupaul0510/history-price.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Abrupaul0510/history-price/issues"
+  },
+  "homepage": "https://github.com/Abrupaul0510/history-price#readme",
+  "dependencies": {
+    "discord.js": "^13.7.0",
+    "dotenv": "^16.0.1",
+    "node-fetch": "^3.2.4",
+    "quickchart-js": "^3.0.1"
+  }
+}
