@@ -1,2 +1,2 @@
 # history-price
- price history bot nodejs AWS
+ Item Price history bot nodejs deploy in AWS Linux Server
