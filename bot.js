@@ -14,9 +14,6 @@ const client = new Discord.Client(
 const PREFIX = "$";
 
 
-
-
-
     //Initilize BOT
 client.on('ready', () => {
     console.log("Youre now Online");
@@ -35,8 +32,8 @@ client.on('messageCreate', (message) => {
           .trim()
           .substring(PREFIX.length)
           .split(/\s+/);
-
-          if (CMD_NAME === "chart6") {
+            //6 MONTHS
+            if (CMD_NAME === "chart-6m"){
             var itemname = args.join(" ");
             let itemname2 = itemname.toString();
             console.log(itemname2);
@@ -88,7 +85,7 @@ client.on('messageCreate', (message) => {
                         ///SEND CHART
                         getUrl(myChart).then(data =>{
                           console.log(data)
-                             message.channel.send(`Sample data ${data}`);
+                             message.channel.send(`Here's what we got ${data}`);
                              }).catch(function (error) {
                            console.log('Error')
                            console.log(error)
@@ -101,7 +98,7 @@ client.on('messageCreate', (message) => {
 
              });
          });
-      }else if(CMD_NAME === "chart1d") {
+      }else if(CMD_NAME === "chart-1d"){
         var itemname = args.join(" ");
         let itemname2 = itemname.toString();
         console.log(itemname2);
@@ -159,7 +156,7 @@ client.on('messageCreate', (message) => {
                     ///SEND CHART
                     getUrl(myChart).then(data =>{
                       console.log(data)
-                         message.channel.send(`Sample data ${data}`);
+                         message.channel.send(`Here's what we got ${data}`);
                          }).catch(function (error) {
                        console.log('Error')
                        console.log(error)
@@ -177,7 +174,7 @@ client.on('messageCreate', (message) => {
 
 
 
-      }else if(CMD_NAME === "chart7d"){
+      }else if(CMD_NAME === "chart-7d"){
         var itemname = args.join(" ");
         let itemname2 = itemname.toString();
         console.log(itemname2);
@@ -237,7 +234,7 @@ client.on('messageCreate', (message) => {
                     ///SEND CHART
                     getUrl(myChart).then(data =>{
                       console.log(data)
-                         message.channel.send(`Sample data ${data}`);
+                         message.channel.send(`Here's what we got ${data}`);
                          }).catch(function (error) {
                        console.log('Error')
                        console.log(error)
@@ -251,11 +248,136 @@ client.on('messageCreate', (message) => {
          });
      });
 
+      }else if(CMD_NAME === "chart-1m"){
+        var itemname = args.join(" ");
+        let itemname2 = itemname.toString();
+        console.log(itemname2);
+        ///DB CNNCTION OPEN
+        const consql = mysql.createConnection({
+          host: process.env.HOST_DB,  
+          user: process.env.USER_DB,
+          password: process.env.PASS_DB,
+          database: process.env.DB_DB
+        });
+
+        consql.connect(function(err) {
+          if (err) throw err;
+          consql.query("SELECT *, DATE_FORMAT(datetimestamp,'%m-%d-%Y') AS newDate FROM pricehistory3 WHERE itemname= '"+itemname2+"' AND datetimestamp >= (NOW() - INTERVAL 1 MONTH) ORDER BY newDate ASC;", function (err, result, fields) {
+            if (err) throw err;
+            if(result.length > 0){
+              var newdata = [];
+              result.forEach(row => {
+                newdata.push([row.newDate,row.itemprice]);
+                });
+                  //START CHART
+                  const myChart = new QuickChart();
+                    myChart.setConfig({ 
+                      "type": "line",
+                      "data": {
+                        "datasets": [
+                          {
+                            "label": itemname2,
+                            "fill": false,
+                            "data": newdata.map(a => { return { x: a[0], y: a[1]  } })
+                          }
+                        ]
+                      },
+                      "options": {
+                        "scales": {
+                          "xAxes": [{
+                            "type": "time",
+                            "time": {
+                              "parser": "MM-DD-YYYY",
+                              "unit": "day",
+                              "displayFormats": {
+                                'millisecond': 'MMM DD',
+                                'second': 'MMM DD',
+                                'minute': 'MMM DD',
+                                'hour': 'MMM DD',
+                                'day': 'MMM DD',
+                                'week': 'MMM DD',
+                                'month': 'MMM DD',
+                                'quarter': 'MMM DD',
+                                'year': 'MMM DD'
+                              }
+                            }
+                          }]
+                        }
+                      }
+                    });
+                    ///SEND CHART
+                    getUrl(myChart).then(data =>{
+                      console.log(data)
+                         message.channel.send(`Here's what we got ${data}`);
+                         }).catch(function (error) {
+                       console.log('Error')
+                       console.log(error)
+                     });        
+                     console.log(newdata);
+            }else{
+              message.channel.send(`The item that your trying to search is not on my Database`);
+            }
+            console.log(result);
+
+         });
+     });
+      }else if(CMD_NAME === "add-watchlist"){
+        var itemname = args.join(" ");
+        let itemstring = itemname.toString();
+
+        const consql = mysql.createConnection({
+          host: process.env.HOST_DB,  
+          user: process.env.USER_DB,
+          password: process.env.PASS_DB,
+          database: process.env.DB_DB
+        });
+
+        consql.connect(function(err) {
+          if (err) throw err;
+          consql.query("INSERT INTO watchlist (items) VALUES ('"+itemstring+"');", function (err, result, fields) {
+            if (err) throw err;
+            console.log(result.affectedRows);
+            console.log(itemstring+' has been added to my watchlist');
+            message.channel.send(`${itemstring} has been added to my watchlist`);
+          });  
+        });
+      }else if(CMD_NAME === "show-watchlist"){
+        var itemname = args.join(" ");
+        let itemstring = itemname.toString();
+
+        const consql = mysql.createConnection({
+          host: process.env.HOST_DB,  
+          user: process.env.USER_DB,
+          password: process.env.PASS_DB,
+          database: process.env.DB_DB
+        });
+
+        consql.connect(function(err) {
+          if (err) throw err;
+          consql.query("SELECT * FROM watchlist;", function (err, result, fields) {
+            if (err) throw err;
+            if(result.length > 0){
+              var watchlist = [];
+              // result.forEach(row => {
+              //   watchlist.push([row.items]);
+              //   });
+                const exampleEmbed = new Discord.MessageEmbed();
+                exampleEmbed.setColor("#3c00ff");
+                exampleEmbed.setTitle("🔥In Watchlist🔥");
+                for (var i = 0; i < result.length; i++) {
+                  exampleEmbed.addFields({
+                    name: "-------------",
+                    value: result[i]["items"],
+                  });
+                }
+                message.channel.send({ embeds: [exampleEmbed] });
+            }
+          });  
+        });
       }
-    }       
+    }      
 });
 
-//GET CHART URL
 async function getUrl(chart)
 {
    const url = await chart.getShortUrl();
@@ -266,96 +388,56 @@ async function getUrl(chart)
 client.login(process.env.CLIENT_TOKEN); 
 
 
-const job = schedule.scheduleJob('*/2 * * * *', function(){
-  var data1 = {
-    tradezone: "13",
-    category: "0",
-    search: "Tempest",
-  };
-  var sentdata = Object.keys(data1)
-        .map((key) => key + "=" + data1[key])
-        .join("&");
-      var url = "http://meaty.dfprofiler.com/browsemarketplace.php?function=browseMarketWithCredits";
-      axios({
-        method: "post",
-        url: url,
-        data: sentdata,
-      })
-        .then(function (response) {
-          const consql = mysql.createConnection({
-            host: process.env.HOST_DB,  
-            user: process.env.USER_DB,
-            password: process.env.PASS_DB,
-            database: process.env.DB_DB
-          });
+const watchjob = schedule.scheduleJob('0 * * * *', function(){
 
-          var result = response.data;
-          var resname1 = result[1].name;
-          var resprice1 = result[1].price;
-          // var resseller1 = result[1].sellerName;
-          console.log(resname1);
-          console.log(resprice1);
-          // console.log(resseller1);
-          console.log('Insert Succesfully');
+  const consql = mysql.createConnection({
+    host: process.env.HOST_DB,  
+    user: process.env.USER_DB,
+    password: process.env.PASS_DB,
+    database: process.env.DB_DB
+  });
 
-                 consql.connect(function(err) {
-                   if (err) throw err;
-                     consql.query("INSERT INTO pricehistory3( itemname, itemprice) VALUES ( '"+resname1+"' , "+resprice1+");", function (err, result, fields) {
-                      if (err) throw err;
-                        console.log(result.affectedRows);
-                    });
-                 });
-             }).catch(function (error) {
-                 console.log('Insert Not Succesfull');
-                 });
-
+  consql.connect(function(err) {
+    if (err) throw err;
+    consql.query("SELECT items FROM watchlist;", function (err, result, fields) { 
+      if(result.length > 0){
+        result.forEach(row => {
+          const items = row.items;
+          var data1 = {
+            tradezone: "13",
+            category: "0",
+            search: items,
+          };
+          var sentdata = Object.keys(data1).map((key) => key + "=" + data1[key]).join("&");
+              var url = "http://meaty.dfprofiler.com/browsemarketplace.php?function=browseMarketWithCredits";
+              axios({
+                method: "post",
+                url: url,
+                data: sentdata,
+              })
+                .then(function (response) {
+                  var result = response.data;
+                  var resname1 = result[1].name;
+                  var resprice1 = result[1].price;
+                           const consql = mysql.createConnection({
+                           host: process.env.HOST_DB,  
+                           user: process.env.USER_DB,
+                           password: process.env.PASS_DB,
+                           database: process.env.DB_DB
+                           });
+                           consql.connect(function(err) {
+                           if (err) throw err;
+                             consql.query("INSERT INTO pricehistory3( itemname, itemprice) VALUES ( '"+resname1+"' , "+resprice1+");", function (err, result, fields) {
+                              if (err) throw err;
+                                console.log(result.affectedRows);
+                                console.log(resname1+' Insert Succesfully');
+                            });
+                         });
+                     }).catch(function (error) {
+                      console.log(resname1+' Insert Not Succesfull');
+              });
+           });
+         }
+     });
+  });
 });
-
-
-const job2 = schedule.scheduleJob('*/2 * * * *', function(){
-  var data1 = {
-    tradezone: "13",
-    category: "0",
-    search: "100 Credits",
-  };
-  var sentdata = Object.keys(data1)
-        .map((key) => key + "=" + data1[key])
-        .join("&");
-      var url = "http://meaty.dfprofiler.com/browsemarketplace.php?function=browseMarketWithCredits";
-      axios({
-        method: "post",
-        url: url,
-        data: sentdata,
-      })
-        .then(function (response) {
-          const consql = mysql.createConnection({
-            host: process.env.HOST_DB,  
-            user: process.env.USER_DB,
-            password: process.env.PASS_DB,
-            database: process.env.DB_DB
-          });
-
-          var result = response.data;
-          var resname1 = result[1].name;
-          var resprice1 = result[1].price;
-          // var resseller1 = result[1].sellerName;
-          console.log(resname1);
-          console.log(resprice1);
-          // console.log(resseller1);
-          console.log('Insert Succesfully');
-
-                 consql.connect(function(err) {
-                   if (err) throw err;
-                     consql.query("INSERT INTO pricehistory3( itemname, itemprice) VALUES ( '"+resname1+"' , "+resprice1+");", function (err, result, fields) {
-                      if (err) throw err;
-                        console.log(result.affectedRows);
-                    });
-                 });
-             }).catch(function (error) {
-                 console.log('Insert Not Succesfull');
-                 });
-
-});
-
-
-
