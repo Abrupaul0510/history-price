@@ -3,6 +3,8 @@ const Discord = require('discord.js');
 const QuickChart = require('quickchart-js');
 const axios = require("axios");
 
+const chartconf = require('./modulesconf');
+
 
 const schedule = require('node-schedule');
 var mysql = require('mysql');
@@ -11,7 +13,7 @@ const client = new Discord.Client(
     {intents: ["GUILDS", "GUILD_MESSAGES" , "GUILD_WEBHOOKS" ,"GUILD_SCHEDULED_EVENTS"]}
     ); //create new client intent
 
-const PREFIX = "$";
+const PREFIX = "%";
 
 
     //Initilize BOT
@@ -56,32 +58,7 @@ client.on('messageCreate', (message) => {
                     });
                       //START CHART
                       const myChart = new QuickChart();
-                        myChart.setConfig({ 
-                          "type": "line",
-                          "data": {
-                            "datasets": [
-                              {
-                                "label": itemname2,
-                                "fill": false,
-                                "data": newdata.map(a => { return { x: a[0], y: a[1]  } })
-                              }
-                            ]
-                          },
-                          "options": {
-                            "scales": {
-                              "xAxes": [{
-                                "type": "time",
-                                "time": {
-                                  "parser": "MM-DD-YYYY",
-                                  "unit": "month",
-                                  "displayFormats": {
-                                    "day": "MMM"
-                                  }
-                                }
-                              }]
-                            }
-                          }
-                        });
+                        myChart.setConfig(chartconf.months6(newdata,itemname2));
                         ///SEND CHART
                         getUrl(myChart).then(data =>{
                           console.log(data)
@@ -90,14 +67,13 @@ client.on('messageCreate', (message) => {
                            console.log('Error')
                            console.log(error)
                          });        
-                         console.log(newdata);
                 }else{
                   message.channel.send(`The item that your trying to search is not on my Database`);
                 }
-                console.log(result);
 
              });
          });
+         //1 DAY RANGE
       }else if(CMD_NAME === "chart-1d"){
         var itemname = args.join(" ");
         let itemname2 = itemname.toString();
@@ -121,38 +97,7 @@ client.on('messageCreate', (message) => {
                 });
                   //START CHART
                   const myChart = new QuickChart();
-                    myChart.setConfig({ 
-                      "type": "line",
-                      "data": {
-                        "datasets": [
-                          {
-                            "label": itemname2,
-                            "fill": false,
-                            "data": newdata.map(a => { return { x: a[0], y: a[1]  } })
-                          }
-                        ]
-                      },
-                      "options": {
-                        "scales": {
-                          "xAxes": [{
-                            "type": "time",
-                            "time": {
-                              "parser": "MM-DD-YYYY HH:mm",
-                              "unit": "hour",
-                              "displayFormats": {
-                                'hour': 'HH:mm:ss',
-                                'second': 'HH:mm:ss',
-                                'minute': 'HH:mm:ss',
-                                'day': 'HH:mm:ss',
-                                'month': 'HH:mm:ss',
-                                'quarter': 'HH:mm:ss',
-                                'year': 'HH:mm:ss'
-                              }
-                            }
-                          }]
-                        }
-                      }
-                    });
+                    myChart.setConfig(chartconf.day1(newdata,itemname2));
                     ///SEND CHART
                     getUrl(myChart).then(data =>{
                       console.log(data)
@@ -161,11 +106,9 @@ client.on('messageCreate', (message) => {
                        console.log('Error')
                        console.log(error)
                      });        
-                     console.log(newdata);
             }else{
               message.channel.send(`The item that your trying to search is not on my Database`);
             }
-            console.log(result);
 
          });
      });
@@ -197,54 +140,17 @@ client.on('messageCreate', (message) => {
                 });
                   //START CHART
                   const myChart = new QuickChart();
-                    myChart.setConfig({ 
-                      "type": "line",
-                      "data": {
-                        "datasets": [
-                          {
-                            "label": itemname2,
-                            "fill": false,
-                            "data": newdata.map(a => { return { x: a[0], y: a[1]  } })
-                          }
-                        ]
-                      },
-                      "options": {
-                        "scales": {
-                          "xAxes": [{
-                            "type": "time",
-                            "time": {
-                              "parser": "MM-DD-YYYY",
-                              "unit": "day",
-                              "displayFormats": {
-                                'millisecond': 'MMM DD',
-                                'second': 'MMM DD',
-                                'minute': 'MMM DD',
-                                'hour': 'MMM DD',
-                                'day': 'MMM DD',
-                                'week': 'MMM DD',
-                                'month': 'MMM DD',
-                                'quarter': 'MMM DD',
-                                'year': 'MMM DD'
-                              }
-                            }
-                          }]
-                        }
-                      }
-                    });
+                    myChart.setConfig(chartconf.day7(newdata,itemname2));
                     ///SEND CHART
                     getUrl(myChart).then(data =>{
-                      console.log(data)
                          message.channel.send(`Here's what we got ${data}`);
                          }).catch(function (error) {
                        console.log('Error')
-                       console.log(error)
                      });        
-                     console.log(newdata);
             }else{
               message.channel.send(`The item that your trying to search is not on my Database`);
             }
             console.log(result);
-
          });
      });
 
@@ -271,40 +177,7 @@ client.on('messageCreate', (message) => {
                 });
                   //START CHART
                   const myChart = new QuickChart();
-                    myChart.setConfig({ 
-                      "type": "line",
-                      "data": {
-                        "datasets": [
-                          {
-                            "label": itemname2,
-                            "fill": false,
-                            "data": newdata.map(a => { return { x: a[0], y: a[1]  } })
-                          }
-                        ]
-                      },
-                      "options": {
-                        "scales": {
-                          "xAxes": [{
-                            "type": "time",
-                            "time": {
-                              "parser": "MM-DD-YYYY",
-                              "unit": "day",
-                              "displayFormats": {
-                                'millisecond': 'MMM DD',
-                                'second': 'MMM DD',
-                                'minute': 'MMM DD',
-                                'hour': 'MMM DD',
-                                'day': 'MMM DD',
-                                'week': 'MMM DD',
-                                'month': 'MMM DD',
-                                'quarter': 'MMM DD',
-                                'year': 'MMM DD'
-                              }
-                            }
-                          }]
-                        }
-                      }
-                    });
+                    myChart.setConfig(chartconf.month1(newdata,itemname2));
                     ///SEND CHART
                     getUrl(myChart).then(data =>{
                       console.log(data)
@@ -388,7 +261,7 @@ async function getUrl(chart)
 client.login(process.env.CLIENT_TOKEN); 
 
 
-const watchjob = schedule.scheduleJob('0 * * * *', function(){
+const watchjob = schedule.scheduleJob('*/59 * * * *', function(){
 
   const consql = mysql.createConnection({
     host: process.env.HOST_DB,  
