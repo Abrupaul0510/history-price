@@ -16,12 +16,6 @@ const client = new Discord.Client(
 const PREFIX = "%";
 
 
-
-
-
-
-
-
     //Initilize BOT
 client.on('ready', () => {
     console.log("Youre now Online");
@@ -40,8 +34,8 @@ client.on('messageCreate', (message) => {
           .trim()
           .substring(PREFIX.length)
           .split(/\s+/);
-
-          if (CMD_NAME === "chart6") {
+            //6 MONTHS
+            if (CMD_NAME === "chart-6m"){
             var itemname = args.join(" ");
             let itemname2 = itemname.toString();
             console.log(itemname2);
@@ -68,7 +62,7 @@ client.on('messageCreate', (message) => {
                         ///SEND CHART
                         getUrl(myChart).then(data =>{
                           console.log(data)
-                             message.channel.send(`Sample data ${data}`);
+                             message.channel.send(`Here's what we got ${data}`);
                              }).catch(function (error) {
                            console.log('Error')
                            console.log(error)
@@ -79,16 +73,8 @@ client.on('messageCreate', (message) => {
 
              });
          });
-<<<<<<< HEAD
-<<<<<<< HEAD
          //1 DAY RANGE
       }else if(CMD_NAME === "chart-1d"){
-=======
-      }else if(CMD_NAME === "chart1d") {
->>>>>>> parent of 0ce8cb9 (Watchlist Feature)
-=======
-      }else if(CMD_NAME === "chart1d") {
->>>>>>> parent of 0ce8cb9 (Watchlist Feature)
         var itemname = args.join(" ");
         let itemname2 = itemname.toString();
         console.log(itemname2);
@@ -115,7 +101,7 @@ client.on('messageCreate', (message) => {
                     ///SEND CHART
                     getUrl(myChart).then(data =>{
                       console.log(data)
-                         message.channel.send(`Sample data ${data}`);
+                         message.channel.send(`Here's what we got ${data}`);
                          }).catch(function (error) {
                        console.log('Error')
                        console.log(error)
@@ -131,7 +117,7 @@ client.on('messageCreate', (message) => {
 
 
 
-      }else if(CMD_NAME === "chart7d"){
+      }else if(CMD_NAME === "chart-7d"){
         var itemname = args.join(" ");
         let itemname2 = itemname.toString();
         console.log(itemname2);
@@ -152,34 +138,22 @@ client.on('messageCreate', (message) => {
               result.forEach(row => {
                 newdata.push([row.newDate,row.itemprice]);
                 });
-                  //START CHART
+                  //START CHARTnbnbn
                   const myChart = new QuickChart();
                     myChart.setConfig(chartconf.day7(newdata,itemname2));
                     ///SEND CHART
                     getUrl(myChart).then(data =>{
-<<<<<<< HEAD
-<<<<<<< HEAD
                          message.channel.send(`Here's what we got ${data}`);
-=======
-                      console.log(data)
-                         message.channel.send(`Sample data ${data}`);
->>>>>>> parent of 0ce8cb9 (Watchlist Feature)
-=======
-                      console.log(data)
-                         message.channel.send(`Sample data ${data}`);
->>>>>>> parent of 0ce8cb9 (Watchlist Feature)
                          }).catch(function (error) {
                        console.log('Error')
                      });        
             }else{
-              message.channel.send(`The item that your trying to search is not on my Database`);
+              message.channel.send(`ThWFe item that your trying to search is not on my Database`);
             }
             console.log(result);
          });
      });
 
-<<<<<<< HEAD
-<<<<<<< HEAD
       }else if(CMD_NAME === "chart-1m"){
         var itemname = args.join(" ");
         let itemname2 = itemname.toString();
@@ -273,15 +247,10 @@ client.on('messageCreate', (message) => {
             }
           });  
         });
-=======
->>>>>>> parent of 0ce8cb9 (Watchlist Feature)
-=======
->>>>>>> parent of 0ce8cb9 (Watchlist Feature)
       }
-    }       
+    }      
 });
 
-//GET CHART URL
 async function getUrl(chart)
 {
    const url = await chart.getShortUrl();
@@ -292,106 +261,56 @@ async function getUrl(chart)
 client.login(process.env.CLIENT_TOKEN); 
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 const watchjob = schedule.scheduleJob('*/59 * * * *', function(){
-=======
-=======
->>>>>>> parent of 0ce8cb9 (Watchlist Feature)
-const job = schedule.scheduleJob('*/2 * * * *', function(){
-  var data1 = {
-    tradezone: "13",
-    category: "0",
-    search: "Tempest",
-  };
-  var sentdata = Object.keys(data1)
-        .map((key) => key + "=" + data1[key])
-        .join("&");
-      var url = "http://meaty.dfprofiler.com/browsemarketplace.php?function=browseMarketWithCredits";
-      axios({
-        method: "post",
-        url: url,
-        data: sentdata,
-      })
-        .then(function (response) {
-          const consql = mysql.createConnection({
-            host: process.env.HOST_DB,  
-            user: process.env.USER_DB,
-            password: process.env.PASS_DB,
-            database: process.env.DB_DB
-          });
 
-          var result = response.data;
-          var resname1 = result[1].name;
-          var resprice1 = result[1].price;
-          // var resseller1 = result[1].sellerName;
-          console.log(resname1);
-          console.log(resprice1);
-          // console.log(resseller1);
-          console.log('Insert Succesfully');
+  const consql = mysql.createConnection({
+    host: process.env.HOST_DB,  
+    user: process.env.USER_DB,
+    password: process.env.PASS_DB,
+    database: process.env.DB_DB
+  });
 
-                 consql.connect(function(err) {
-                   if (err) throw err;
-                     consql.query("INSERT INTO pricehistory3( itemname, itemprice) VALUES ( '"+resname1+"' , "+resprice1+");", function (err, result, fields) {
-                      if (err) throw err;
-                        console.log(result.affectedRows);
-                    });
-                 });
-             }).catch(function (error) {
-                 console.log('Insert Not Succesfull');
-                 });
-
+  consql.connect(function(err) {
+    if (err) throw err;
+    consql.query("SELECT items FROM watchlist;", function (err, result, fields) { 
+      if(result.length > 0){
+        result.forEach(row => {
+          const items = row.items;
+          var data1 = {
+            tradezone: "13",
+            category: "0",
+            search: items,
+          };
+          var sentdata = Object.keys(data1).map((key) => key + "=" + data1[key]).join("&");
+              var url = "http://meaty.dfprofiler.com/browsemarketplace.php?function=browseMarketWithCredits";
+              axios({
+                method: "post",
+                url: url,
+                data: sentdata,
+              })
+                .then(function (response) {
+                  var result = response.data;
+                  var resname1 = result[1].name;
+                  var resprice1 = result[1].price;
+                           const consql = mysql.createConnection({
+                           host: process.env.HOST_DB,  
+                           user: process.env.USER_DB,
+                           password: process.env.PASS_DB,
+                           database: process.env.DB_DB
+                           });
+                           consql.connect(function(err) {
+                           if (err) throw err;
+                             consql.query("INSERT INTO pricehistory3( itemname, itemprice) VALUES ( '"+resname1+"' , "+resprice1+");", function (err, result, fields) {
+                              if (err) throw err;
+                                console.log(result.affectedRows);
+                                console.log(resname1+' Insert Succesfully');
+                            });
+                         });
+                     }).catch(function (error) {
+                      console.log(resname1+' Insert Not Succesfull');
+              });
+           });
+         }
+     });
+  });
 });
-
-
-const job2 = schedule.scheduleJob('*/2 * * * *', function(){
-  var data1 = {
-    tradezone: "13",
-    category: "0",
-    search: "100 Credits",
-  };
-  var sentdata = Object.keys(data1)
-        .map((key) => key + "=" + data1[key])
-        .join("&");
-      var url = "http://meaty.dfprofiler.com/browsemarketplace.php?function=browseMarketWithCredits";
-      axios({
-        method: "post",
-        url: url,
-        data: sentdata,
-      })
-        .then(function (response) {
-          const consql = mysql.createConnection({
-            host: process.env.HOST_DB,  
-            user: process.env.USER_DB,
-            password: process.env.PASS_DB,
-            database: process.env.DB_DB
-          });
-
-          var result = response.data;
-          var resname1 = result[1].name;
-          var resprice1 = result[1].price;
-          // var resseller1 = result[1].sellerName;
-          console.log(resname1);
-          console.log(resprice1);
-          // console.log(resseller1);
-          console.log('Insert Succesfully');
-
-                 consql.connect(function(err) {
-                   if (err) throw err;
-                     consql.query("INSERT INTO pricehistory3( itemname, itemprice) VALUES ( '"+resname1+"' , "+resprice1+");", function (err, result, fields) {
-                      if (err) throw err;
-                        console.log(result.affectedRows);
-                    });
-                 });
-             }).catch(function (error) {
-                 console.log('Insert Not Succesfull');
-                 });
-
-});
-
-<<<<<<< HEAD
->>>>>>> parent of 0ce8cb9 (Watchlist Feature)
-=======
->>>>>>> parent of 0ce8cb9 (Watchlist Feature)
-
-
