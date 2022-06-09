@@ -19,6 +19,9 @@ const PREFIX = "%";
 
 
 
+
+
+
     //Initilize BOT
 client.on('ready', () => {
     console.log("Youre now Online");
@@ -77,8 +80,12 @@ client.on('messageCreate', (message) => {
              });
          });
 <<<<<<< HEAD
+<<<<<<< HEAD
          //1 DAY RANGE
       }else if(CMD_NAME === "chart-1d"){
+=======
+      }else if(CMD_NAME === "chart1d") {
+>>>>>>> parent of 0ce8cb9 (Watchlist Feature)
 =======
       }else if(CMD_NAME === "chart1d") {
 >>>>>>> parent of 0ce8cb9 (Watchlist Feature)
@@ -151,7 +158,12 @@ client.on('messageCreate', (message) => {
                     ///SEND CHART
                     getUrl(myChart).then(data =>{
 <<<<<<< HEAD
+<<<<<<< HEAD
                          message.channel.send(`Here's what we got ${data}`);
+=======
+                      console.log(data)
+                         message.channel.send(`Sample data ${data}`);
+>>>>>>> parent of 0ce8cb9 (Watchlist Feature)
 =======
                       console.log(data)
                          message.channel.send(`Sample data ${data}`);
@@ -166,6 +178,7 @@ client.on('messageCreate', (message) => {
          });
      });
 
+<<<<<<< HEAD
 <<<<<<< HEAD
       }else if(CMD_NAME === "chart-1m"){
         var itemname = args.join(" ");
@@ -262,6 +275,8 @@ client.on('messageCreate', (message) => {
         });
 =======
 >>>>>>> parent of 0ce8cb9 (Watchlist Feature)
+=======
+>>>>>>> parent of 0ce8cb9 (Watchlist Feature)
       }
     }       
 });
@@ -278,8 +293,11 @@ client.login(process.env.CLIENT_TOKEN);
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 const watchjob = schedule.scheduleJob('*/59 * * * *', function(){
 =======
+=======
+>>>>>>> parent of 0ce8cb9 (Watchlist Feature)
 const job = schedule.scheduleJob('*/2 * * * *', function(){
   var data1 = {
     tradezone: "13",
@@ -371,6 +389,9 @@ const job2 = schedule.scheduleJob('*/2 * * * *', function(){
 
 });
 
+<<<<<<< HEAD
+>>>>>>> parent of 0ce8cb9 (Watchlist Feature)
+=======
 >>>>>>> parent of 0ce8cb9 (Watchlist Feature)
 
 
