@@ -35,7 +35,7 @@ client.on('messageCreate', (message) => {
           .substring(PREFIX.length)
           .split(/\s+/);
             //6 MONTHS
-            if (CMD_NAME === "chart-6m"){
+            if (CMD_NAME === "6m"){
             var itemname = args.join(" ");
             let itemname2 = itemname.toString();
             console.log(itemname2);
@@ -68,13 +68,13 @@ client.on('messageCreate', (message) => {
                            console.log(error)
                          });        
                 }else{
-                  message.channel.send(`The item that your trying to search is not on my Database`);
+                  message.channel.send(`The item that your trying to search is not on my Database try adding it to the watchlist`);
                 }
 
              });
          });
          //1 DAY RANGE
-      }else if(CMD_NAME === "chart-1d"){
+      }else if(CMD_NAME === "1d"){
         var itemname = args.join(" ");
         let itemname2 = itemname.toString();
         console.log(itemname2);
@@ -107,7 +107,7 @@ client.on('messageCreate', (message) => {
                        console.log(error)
                      });        
             }else{
-              message.channel.send(`The item that your trying to search is not on my Database`);
+              message.channel.send(`The item that your trying to search is not on my Database try adding it to the watchlist`);
             }
 
          });
@@ -117,7 +117,7 @@ client.on('messageCreate', (message) => {
 
 
 
-      }else if(CMD_NAME === "chart-7d"){
+      }else if(CMD_NAME === "7d"){
         var itemname = args.join(" ");
         let itemname2 = itemname.toString();
         console.log(itemname2);
@@ -148,13 +148,13 @@ client.on('messageCreate', (message) => {
                        console.log('Error')
                      });        
             }else{
-              message.channel.send(`ThWFe item that your trying to search is not on my Database`);
+              message.channel.send(`The item that your trying to search is not on my Database try adding it to the watchlist`);
             }
             console.log(result);
          });
      });
 
-      }else if(CMD_NAME === "chart-1m"){
+      }else if(CMD_NAME === "1m"){
         var itemname = args.join(" ");
         let itemname2 = itemname.toString();
         console.log(itemname2);
@@ -188,7 +188,7 @@ client.on('messageCreate', (message) => {
                      });        
                      console.log(newdata);
             }else{
-              message.channel.send(`The item that your trying to search is not on my Database`);
+              message.channel.send(`The item that your trying to search is not on my Database try adding it to the watchlist`);
             }
             console.log(result);
 
@@ -236,7 +236,7 @@ client.on('messageCreate', (message) => {
               //   });
                 const exampleEmbed = new Discord.MessageEmbed();
                 exampleEmbed.setColor("#3c00ff");
-                exampleEmbed.setTitle("🔥In Watchlist🔥");
+                exampleEmbed.setTitle("🔥On Kana's Watchlist🔥");
                 for (var i = 0; i < result.length; i++) {
                   exampleEmbed.addFields({
                     name: "-------------",

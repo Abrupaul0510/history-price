@@ -18,7 +18,7 @@ exports.months6= function (newdata,itemname2) {
             "xAxes": [{
               "scaleLabel": {
                 "display": true,
-                "labelString": '6-Month Range',
+                "labelString": '6-Month Range | Kanabot -GlennR',
               },
               "type": "time",
               "time": {
@@ -61,7 +61,7 @@ exports.day1= function(newdata,itemname2) {
           "xAxes": [{
             "scaleLabel": {
               "display": true,
-              "labelString": 'Hours UTC 00:00',
+              "labelString": 'Hours UTC 00:00 | Kanabot -GlennR',
             },
             "type": "time",
                "time": {
@@ -82,7 +82,7 @@ exports.day1= function(newdata,itemname2) {
             {
               "scaleLabel": {
                 "display": true,
-                "labelString": 'Dulars',
+                "labelString": '$$$$',
                 "fontColor": '#ff0000',
                 "fontSize": 8,
                 "fontStyle": 'bold',
@@ -112,7 +112,7 @@ exports.day7= function(newdata,itemname2) {
           "xAxes": [{
               "scaleLabel": {
                 "display": true,
-                "labelString": '7-Day Range',
+                "labelString": '7-Day Range | Kanabot -GlennR',
               },
             "type": "time",
             "time": {
@@ -154,7 +154,7 @@ exports.day7= function(newdata,itemname2) {
         "scales": {
           "xAxes": [{ "scaleLabel": {
             "display": true,
-            "labelString": '1-Month Range',
+            "labelString": '1-Month Range | Kanabot -GlennR',
              },
             "type": "time",
             "time": {
